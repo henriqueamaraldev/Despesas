@@ -4,15 +4,18 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
+import { ExpensesModule } from './expenses/expenses.module';
 
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGODBLINK),
-    UserModule
+    UserModule,
+    ExpensesModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
+
 export class AppModule { }
