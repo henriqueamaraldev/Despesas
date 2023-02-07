@@ -16,7 +16,7 @@ export class CreateUserDto {
     @IsString()
     @IsNotEmpty()
     @IsStrongPassword()
-    password: string[];
+    password: string;
 
 }
 

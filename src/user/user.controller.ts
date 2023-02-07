@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
+import { Response } from 'express';
 
 @Controller('users')
 export class UserController {
@@ -12,19 +13,38 @@ export class UserController {
 
 
     @Post()
-    createUser(
-        @Body() payload: CreateUserDto
+    async createUser(
+        @Body() payload: CreateUserDto,
+        @Res() res: Response
     ) {
 
-        return this.usersService.create(payload);
+        const newUser = await this.usersService.create(payload);
+
+        if (!newUser) {
+
+            res.status(HttpStatus.BAD_REQUEST).send("email already in use.")
+
+        }
+
+        res.status(HttpStatus.OK).send(newUser)
 
     }
 
 
     @Get()
-    async getUsers() {
+    async getUsers(
+        @Res() res: Response
+    ) {
 
-        return this.usersService.list();
+        const users = await this.usersService.list();
+
+        if (users.length == 0) {
+
+            res.status(HttpStatus.NO_CONTENT).send("Não foram encontrados usuários")
+
+        }
+
+        res.status(HttpStatus.OK).send(users)
 
     }
 

@@ -14,8 +14,12 @@ export class IUser {
     email: string;
 
 
-    @Prop({ required: true, select: false, index: true })
-    password: string[];
+    @Prop({ required: true, index: true })
+    password: string;
+
+
+    @Prop({ required: true, index: true, default: true })
+    isActive: boolean;
 
 }
 
