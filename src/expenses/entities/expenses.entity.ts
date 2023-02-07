@@ -21,6 +21,9 @@ export class IExpenses {
     @Prop({ required: true, index: false })
     value: number;
 
+    @Prop({ required: true, index: true, default: true })
+    isActive: boolean;
+
 }
 
 export const ExpensesSchema = SchemaFactory.createForClass(IExpenses).set(
