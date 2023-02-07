@@ -9,13 +9,13 @@ export class UserService {
 
 
   constructor(
-    @InjectModel(IUser.name) private classModel: Model<UsersDocument>
+    @InjectModel(IUser.name) private expensesModel: Model<UsersDocument>
   ) { }
 
 
   async list() {
 
-    const users = await this.classModel.find()
+    const users = await this.expensesModel.find()
 
     return users;
 
@@ -24,9 +24,9 @@ export class UserService {
 
   async create(data: CreateUserDto) {
 
-    const modelClass = new this.classModel(data);
+    const modelUser = new this.expensesModel(data);
 
-    return await modelClass.save();
+    return await modelUser.save();
 
   }
 

@@ -19,7 +19,7 @@ export class IUser {
 
 }
 
-export const ClassesSchema = SchemaFactory.createForClass(IUser).set(
+export const UsersSchema = SchemaFactory.createForClass(IUser).set(
     'timestamps',
     true,
 );
