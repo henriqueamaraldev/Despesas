@@ -3,6 +3,8 @@ import { ExpensesService } from './expenses.service';
 import { Response } from 'express';
 import { CreateExpensesDto, UpdateExpensesDto } from './dto/create-expenses.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { PaginationOptions } from 'src/database/Paginate.service';
+
 
 @Controller('expenses')
 export class ExpensesController {
@@ -31,23 +33,23 @@ export class ExpensesController {
 
     @Get()
     @UseGuards(JwtAuthGuard)
-
     async getExpenses(
         @Res() res: Response,
         @Req() req
     ) {
 
         const userId = req.user.id;
+        const pagitateOptions = req.body.paginate as PaginationOptions
 
-        const users = await this.expensesService.list(userId);
+        const expenses = await this.expensesService.list(userId, pagitateOptions);
 
-        if (users.length == 0) {
+        if (expenses.data.length == 0) {
 
             res.status(HttpStatus.NO_CONTENT).send("Não foram encontrados usuários")
 
         }
 
-        res.status(HttpStatus.OK).send(users)
+        res.status(HttpStatus.OK).send(expenses)
 
     }
 

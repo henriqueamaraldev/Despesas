@@ -1,23 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Expenses } from './entities/expenses.entity';
 import { CreateExpensesDto, UpdateExpensesDto } from './dto/create-expenses.dto';
+import { Paginate, PaginationOptions } from 'src/database/Paginate.service';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class ExpensesService {
 
 
     constructor(
-        @InjectModel(Expenses.name) private expensesModel: Model<Expenses>
+        @InjectModel(Expenses.name) private expensesModel: Model<Expenses>,
+        @InjectModel(Expenses.name) private paginate: Paginate,
     ) { }
 
 
-    async list(userId: string) {
+    async list(userId: string, paginate: PaginationOptions) {
 
         try {
 
-            let userExpenses = await this.expensesModel.find({ userId, isActive: true });
+            let filters = { userId, isActive: true };
+
+            let userExpenses = await this.paginate.aggregate<Expenses>(
+                this.expensesModel,
+                paginate,
+                filters
+            );
+
+            userExpenses.data.forEach(expense => {
+                delete expense.__v
+                delete expense.isActive
+                delete expense.deletedDate
+            })
+
             return userExpenses;
 
         } catch (error) {
