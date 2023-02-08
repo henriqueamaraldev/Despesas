@@ -33,6 +33,12 @@ export class ExpensesService {
 
             let expense = await this.expensesModel.findById(id);
 
+            if (!expense) {
+
+                return;
+
+            }
+
             return expense;
 
         } catch (error) {
@@ -63,10 +69,20 @@ export class ExpensesService {
 
         try {
 
-            await this.expensesModel.findOneAndUpdate(
-                { _id: expenseId, userId: userId },
+            let expense = await this.expensesModel.findById(expenseId);
+
+            if (!expense) {
+
+                return;
+
+            }
+
+            let deletedExpense = await this.expensesModel.findOneAndUpdate(
+                { _id: expense._id, userId: userId },
                 { isActive: false }
             );
+
+            return deletedExpense;
 
         } catch (error) {
 
@@ -80,8 +96,16 @@ export class ExpensesService {
 
         try {
 
+            let expense = await this.expensesModel.findById(expenseId);
+
+            if (!expense) {
+
+                return;
+
+            }
+
             let updatedExpense = await this.expensesModel.findOneAndUpdate(
-                { _id: expenseId, userId: userId },
+                { _id: expense._id, userId: userId },
                 data
             );
 
