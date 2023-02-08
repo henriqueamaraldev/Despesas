@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type ExpensesDocument = Expenses & Document;
+export type ExpensesDocument = Expenses;
 
 @Schema()
-export class Expenses {
+export class Expenses extends Document {
 
     @Prop({ required: false, index: false })
     description: string;
@@ -24,6 +24,10 @@ export class Expenses {
 
     @Prop({ required: true, index: true, default: true })
     isActive: boolean;
+
+
+    @Prop({ required: true, index: true, default: null })
+    deletedDate: Date;
 
 }
 

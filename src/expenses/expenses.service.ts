@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { ExpensesDocument, Expenses } from './entities/expenses.entity';
+import { Expenses } from './entities/expenses.entity';
 import { CreateExpensesDto, UpdateExpensesDto } from './dto/create-expenses.dto';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class ExpensesService {
 
 
     constructor(
-        @InjectModel(Expenses.name) private expensesModel: Model<ExpensesDocument>
+        @InjectModel(Expenses.name) private expensesModel: Model<Expenses>
     ) { }
 
 
@@ -27,11 +27,11 @@ export class ExpensesService {
         }
     }
 
-    async getById(id: string) {
+    async getById(id: string, userId: string) {
 
         try {
 
-            let expense = await this.expensesModel.findById(id);
+            let expense = await this.expensesModel.findOne({ _id: id, userId: userId, isActive: true });
 
             if (!expense) {
 
@@ -69,7 +69,7 @@ export class ExpensesService {
 
         try {
 
-            let expense = await this.expensesModel.findById(expenseId);
+            let expense = await this.expensesModel.findOne({ _id: expenseId, userId: userId, isActive: true });
 
             if (!expense) {
 
@@ -79,7 +79,7 @@ export class ExpensesService {
 
             let deletedExpense = await this.expensesModel.findOneAndUpdate(
                 { _id: expense._id, userId: userId },
-                { isActive: false }
+                { isActive: false, deletedDate: new Date() }
             );
 
             return deletedExpense;
@@ -96,7 +96,7 @@ export class ExpensesService {
 
         try {
 
-            let expense = await this.expensesModel.findById(expenseId);
+            let expense = await this.expensesModel.findOne({ _id: expenseId, userId: userId, isActive: true });
 
             if (!expense) {
 
