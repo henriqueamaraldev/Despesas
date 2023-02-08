@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { UsersDocument, User } from './entities/user.entity';
+import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { UserDatabase } from './database/user.database';
 
 
 @Injectable()
@@ -11,7 +11,7 @@ export class UserService {
 
 
   constructor(
-    @InjectModel(User.name) private usersModel: Model<User>
+    @InjectModel(User.name) private usersModel: UserDatabase
   ) { }
 
 

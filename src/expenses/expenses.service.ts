@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Expenses } from './entities/expenses.entity';
 import { CreateExpensesDto, UpdateExpensesDto } from './dto/create-expenses.dto';
 import { MailService } from 'src/mailer/mail.service';
+import { ExpensesDatabase } from 'src/database/expenses.database';
 
 @Injectable()
 export class ExpensesService {
@@ -11,7 +12,7 @@ export class ExpensesService {
     public _mailService: MailService;
 
     constructor(
-        @InjectModel(Expenses.name) private expensesModel: Model<Expenses>,
+        @InjectModel(Expenses.name) private expensesModel: ExpensesDatabase,
         mailerService: MailService
     ) {
         this._mailService = mailerService;

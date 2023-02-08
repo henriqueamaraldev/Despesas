@@ -4,6 +4,7 @@ import { ExpensesController } from './expenses.controller';
 import { ExpensesService } from './expenses.service';
 import { ExpensesSchema, Expenses } from './entities/expenses.entity';
 import { MailModule } from 'src/mailer/mail.module';
+import { ExpensesDatabase } from 'src/database/expenses.database';
 
 @Module({
 
@@ -12,7 +13,7 @@ import { MailModule } from 'src/mailer/mail.module';
         MailModule
     ],
     controllers: [ExpensesController],
-    providers: [ExpensesService],
+    providers: [ExpensesService, ExpensesDatabase],
 
 })
 export class ExpensesModule { }
