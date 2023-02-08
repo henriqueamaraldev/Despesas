@@ -22,7 +22,7 @@ export class UserController {
 
         if (!newUser) {
 
-            res.status(HttpStatus.BAD_REQUEST).send("email already in use.")
+            res.status(HttpStatus.BAD_REQUEST).send("Email already in use.")
 
         }
 
@@ -30,7 +30,7 @@ export class UserController {
 
     }
 
-
+    //@UseGuards(LocalAuthGuard)
     @Get()
     async getUsers(
         @Res() res: Response
