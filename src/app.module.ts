@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { ExpensesModule } from './expenses/expenses.module';
 import { AuthModule } from './auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { MailModule } from './mailer/mail.module';
 
 
 @Module({
@@ -25,7 +26,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
           pass: process.env.SMTP_PASS,
         }
       }
-    })
+    }),
+    MailModule
   ],
   controllers: [AppController],
   providers: [AppService],
