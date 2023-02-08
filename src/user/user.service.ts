@@ -63,7 +63,7 @@ export class UserService {
   async findByEmail(email: string) {
 
     const user = await this.usersModel.findOne({ email: email });
-    console.log("TESTE", user)
+
     return user;
   }
 
