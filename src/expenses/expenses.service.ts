@@ -1,22 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
-import { Expenses } from './entities/expenses.entity';
+import { Injectable } from '@nestjs/common';
 import { CreateExpensesDto, UpdateExpensesDto } from './dto/create-expenses.dto';
-import { MailService } from 'src/mailer/mail.service';
-import { ExpensesDatabase } from 'src/database/expenses.database';
+import { MailService } from '../mailer/mail.service';
+import { ExpensesDatabase } from './database/expenses.database';
 
 @Injectable()
 export class ExpensesService {
 
-    public _mailService: MailService;
 
     constructor(
-        @InjectModel(Expenses.name) private expensesModel: ExpensesDatabase,
-        mailerService: MailService
-    ) {
-        this._mailService = mailerService;
-    }
+        private expensesModel: ExpensesDatabase,
+        private mailerService: MailService
+    ) { }
 
 
     async list(userId: string) {
@@ -24,6 +18,7 @@ export class ExpensesService {
         try {
 
             let userExpenses = await this.expensesModel.find({ userId, isActive: true });
+
             return userExpenses;
 
         } catch (error) {
@@ -61,7 +56,7 @@ export class ExpensesService {
 
             let newExpense = await this.expensesModel.create({ ...data, userId: userId });
 
-            let mail = this._mailService.sendEmail(
+            let mail = this.mailerService.sendEmail(
                 userEmail,
                 'Despesa cadastrada',
                 `Uma nova despesa foi cadastrada ${newExpense.description}: 

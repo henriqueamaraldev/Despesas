@@ -11,7 +11,7 @@ export class UserService {
 
 
   constructor(
-    @InjectModel(User.name) private usersModel: UserDatabase
+    private usersModel: UserDatabase
   ) { }
 
 
