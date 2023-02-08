@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { ExpensesDocument, IExpenses } from './entities/expenses.entity';
+import { ExpensesDocument, Expenses } from './entities/expenses.entity';
 import { CreateExpensesDto, UpdateExpensesDto } from './dto/create-expenses.dto';
 
 @Injectable()
@@ -9,11 +9,11 @@ export class ExpensesService {
 
 
     constructor(
-        @InjectModel(IExpenses.name) private expensesModel: Model<ExpensesDocument>
+        @InjectModel(Expenses.name) private expensesModel: Model<ExpensesDocument>
     ) { }
 
 
-    async listExpenses(userId: string) {
+    async list(userId: string) {
 
         try {
 
@@ -27,7 +27,7 @@ export class ExpensesService {
         }
     }
 
-    async getExpenseById(id: string) {
+    async getById(id: string) {
 
         try {
 
@@ -43,7 +43,7 @@ export class ExpensesService {
     }
 
 
-    async createExpense(data: CreateExpensesDto, userId: string) {
+    async create(data: CreateExpensesDto, userId: string) {
 
         try {
 
@@ -59,7 +59,7 @@ export class ExpensesService {
     }
 
 
-    async deleteExpense(expenseId: string, userId: string) {
+    async delete(expenseId: string, userId: string) {
 
         try {
 
@@ -76,7 +76,7 @@ export class ExpensesService {
     }
 
 
-    async updateExpense(expenseId: string, userId: string, data: UpdateExpensesDto) {
+    async update(expenseId: string, userId: string, data: UpdateExpensesDto) {
 
         try {
 
