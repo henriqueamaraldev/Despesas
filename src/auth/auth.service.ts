@@ -20,9 +20,9 @@ export class AuthService {
 
     if (user && (await bcrypt.compare(password, user.password))) {
 
-      const { password, ...result } = user;
+      delete user.password;
 
-      return result;
+      return user;
 
     }
 
@@ -33,8 +33,7 @@ export class AuthService {
 
   async login(user: any) {
 
-    const payload = { email: user.email, sub: user.id };
-
+    const payload = { email: user.email, sub: user._id };
     return {
       token: this.jwtService.sign(payload),
     };
