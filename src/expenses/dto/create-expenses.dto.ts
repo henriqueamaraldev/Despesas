@@ -16,7 +16,7 @@ export class CreateExpensesDto {
     @IsNumber()
     @IsPositive()
     @IsNotEmpty()
-    value: string;
+    value: number;
 
 }
 

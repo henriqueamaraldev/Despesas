@@ -29,6 +29,7 @@ describe('UserService', () => {
     });
 
     describe("list", () => {
+
         it('should return a list of users', async () => {
 
             const users = [
@@ -52,6 +53,39 @@ describe('UserService', () => {
 
             expect(result).toEqual(users);
         });
+
+
+        it('Should return an emprty array list', async () => {
+
+            const users = [
+            ]
+
+            mockRepository.find.mockReturnValue(users);
+
+            let result = await userService.list()
+
+            expect(result).toEqual([]);
+
+        })
+
+
+        it('Should return a user with the same email', async () => {
+
+            const user = {
+                name: 'teste@teste.com',
+                email: '',
+                password: '',
+                isActive: true
+            }
+
+            mockRepository.findOne.mockReturnValue(user);
+
+            let result = await userService.findByEmail('teste@teste.com')
+
+            expect(result.email).toEqual(user.email);
+
+        })
+
     });
 
 })
