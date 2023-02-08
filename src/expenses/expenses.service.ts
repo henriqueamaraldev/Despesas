@@ -3,13 +3,15 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Expenses } from './entities/expenses.entity';
 import { CreateExpensesDto, UpdateExpensesDto } from './dto/create-expenses.dto';
+import { MailerService } from '@nestjs-modules/mailer/dist';
 
 @Injectable()
 export class ExpensesService {
 
 
     constructor(
-        @InjectModel(Expenses.name) private expensesModel: Model<Expenses>
+        @InjectModel(Expenses.name) private expensesModel: Model<Expenses>,
+        private mailerService: MailerService,
     ) { }
 
 
@@ -49,11 +51,19 @@ export class ExpensesService {
     }
 
 
-    async create(data: CreateExpensesDto, userId: string) {
+    async create(data: CreateExpensesDto, userId: string, userEmail: string) {
 
         try {
 
             let newExpense = await this.expensesModel.create({ ...data, userId: userId });
+
+            let mail = await this.mailerService.sendMail({
+                to: userEmail,
+                from: process.env.ADMIN_EMAIL,
+                subject: 'Despesa cadastrada',
+                text: `Uma nova despesa foi cadastrada ${newExpense.description}: 
+                    Valor: ${newExpense.value}`
+            })
 
             return newExpense;
 

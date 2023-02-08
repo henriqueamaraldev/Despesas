@@ -22,7 +22,10 @@ export class ExpensesController {
     ) {
 
         const userId = req.user.id;
-        const newExpense = await this.expensesService.create(payload, userId);
+
+        let userEmail = req.user.email;
+
+        const newExpense = await this.expensesService.create(payload, userId, userEmail);
 
         res.status(HttpStatus.OK).send(newExpense)
 
@@ -37,9 +40,9 @@ export class ExpensesController {
         @Req() req
     ) {
 
-        const userId = req.user.id;
+        let userId = req.user.id;
 
-        const users = await this.expensesService.list(userId);
+        let users = await this.expensesService.list(userId);
 
         if (users.length == 0) {
 

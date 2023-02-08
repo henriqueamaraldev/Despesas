@@ -30,7 +30,6 @@ export class UserController {
 
     }
 
-    //@UseGuards(LocalAuthGuard)
     @Get()
     async getUsers(
         @Res() res: Response

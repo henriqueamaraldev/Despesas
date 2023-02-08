@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { ExpensesModule } from './expenses/expenses.module';
 import { AuthModule } from './auth/auth.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 
 @Module({
@@ -15,7 +16,16 @@ import { AuthModule } from './auth/auth.module';
     MongooseModule.forRoot(process.env.MONGODBLINK),
     UserModule,
     ExpensesModule,
-    AuthModule
+    AuthModule,
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.SMTP_HOST,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        }
+      }
+    })
   ],
   controllers: [AppController],
   providers: [AppService],

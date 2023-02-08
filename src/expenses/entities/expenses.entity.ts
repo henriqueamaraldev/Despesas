@@ -26,7 +26,7 @@ export class Expenses extends Document {
     isActive: boolean;
 
 
-    @Prop({ required: true, index: true, default: null })
+    @Prop({ index: true })
     deletedDate: Date;
 
 }
