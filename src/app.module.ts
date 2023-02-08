@@ -5,17 +5,21 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { ExpensesModule } from './expenses/expenses.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
+
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGODBLINK),
     UserModule,
-    ExpensesModule
+    ExpensesModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
+
 })
 
 export class AppModule { }
