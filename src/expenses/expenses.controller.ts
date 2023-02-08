@@ -1,7 +1,8 @@
-import { Body, Controller, Get, HttpStatus, Post, Res, Req, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Res, Req, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { CreateExpensesDto, UpdateExpensesDto } from './dto/create-expenses.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('expenses')
 export class ExpensesController {
@@ -13,12 +14,15 @@ export class ExpensesController {
 
 
     @Post()
+    @UseGuards(JwtAuthGuard)
     async createExpense(
         @Body() payload: CreateExpensesDto,
         @Res() res: Response,
-        @Req() req: Request
+        @Req() req
     ) {
-        const newExpense = await this.expensesService.create(payload, '');
+
+        const userId = req.user.id;
+        const newExpense = await this.expensesService.create(payload, userId);
 
         res.status(HttpStatus.OK).send(newExpense)
 
@@ -26,11 +30,14 @@ export class ExpensesController {
 
 
     @Get()
+    @UseGuards(JwtAuthGuard)
+
     async getExpenses(
-        @Res() res: Response
+        @Res() res: Response,
+        @Req() req
     ) {
 
-        let userId = ''
+        const userId = req.user.id;
 
         const users = await this.expensesService.list(userId);
 
@@ -46,14 +53,18 @@ export class ExpensesController {
 
 
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     async getExpenseById(
+        @Param('id') expenseId: string,
         @Res() res: Response,
-        @Param('id') expenseId: string
+        @Req() req
     ) {
 
-        const expense = await this.expensesService.getById(expenseId);
+        const userId = req.user.id;
 
-        if (expense) {
+        const expense = await this.expensesService.getById(expenseId, userId);
+
+        if (!expense) {
 
             res.status(HttpStatus.NO_CONTENT).send("Despesa não encontrada.")
 
@@ -65,13 +76,17 @@ export class ExpensesController {
 
 
     @Patch(':id')
+    @UseGuards(JwtAuthGuard)
     async updateExpense(
-        @Res() res: Response,
         @Body() payload: UpdateExpensesDto,
-        @Param('id') expenseId: string
+        @Param('id') expenseId: string,
+        @Res() res: Response,
+        @Req() req,
     ) {
 
-        const expense = await this.expensesService.update(expenseId, expenseId, payload);
+        const userId = req.user.id;
+
+        const expense = await this.expensesService.update(expenseId, userId, payload);
 
         if (!expense) {
 
@@ -85,12 +100,16 @@ export class ExpensesController {
 
 
     @Delete(':id')
+    @UseGuards(JwtAuthGuard)
     async deleteExpense(
         @Res() res: Response,
-        @Param('id') expenseId: string
+        @Param('id') expenseId: string,
+        @Req() req,
     ) {
 
-        const expense = await this.expensesService.delete(expenseId, expenseId);
+        const userId = req.user.id;
+
+        const expense = await this.expensesService.delete(expenseId, userId);
 
         if (!expense) {
 
