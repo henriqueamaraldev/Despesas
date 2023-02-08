@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type ExpensesDocument = IExpenses & Document;
+export type ExpensesDocument = Expenses & Document;
 
 @Schema()
-export class IExpenses {
+export class Expenses {
 
     @Prop({ required: false, index: false })
     description: string;
@@ -27,7 +27,7 @@ export class IExpenses {
 
 }
 
-export const ExpensesSchema = SchemaFactory.createForClass(IExpenses).set(
+export const ExpensesSchema = SchemaFactory.createForClass(Expenses).set(
     'timestamps',
     true,
 );
