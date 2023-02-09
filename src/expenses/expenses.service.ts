@@ -77,9 +77,9 @@ export class ExpensesService {
 
         try {
 
-            let expense = await this.expensesModel.findOne({ _id: expenseId, userId: userId, isActive: true });
+            let expense = await this.expensesModel.findOne({ _id: expenseId, userId: userId });
 
-            if (!expense) {
+            if (!expense || !expense.isActive) {
 
                 return;
 

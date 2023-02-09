@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserDatabase } from './database/user.database';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 
 describe('UserService', () => {
@@ -83,6 +84,30 @@ describe('UserService', () => {
             let result = await userService.findByEmail('teste@teste.com')
 
             expect(result.email).toEqual(user.email);
+
+        })
+
+
+        it('Should return null when a user exists', async () => {
+
+            const user = {
+                name: 'teste@teste.com',
+                email: '',
+                password: '',
+                isActive: true
+            }
+
+            const userDto: CreateUserDto = {
+                email: 'teste@teste.com',
+                password: 'teste',
+                name: 'tester'
+            }
+
+            mockRepository.findOne.mockReturnValue(user);
+
+            let result = await userService.create(userDto)
+
+            expect(result).toBeUndefined();
 
         })
 

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { MailService } from '../mailer/mail.service';
 import { ExpensesDatabase } from './database/expenses.database';
-import { CreateExpensesDto } from './dto/create-expenses.dto';
+import { CreateExpensesDto, UpdateExpensesDto } from './dto/create-expenses.dto';
 import { ExpensesService } from './expenses.service'
 
 describe('ExpensesService', () => {
@@ -120,6 +120,112 @@ describe('ExpensesService', () => {
             let result = await expensesService.create(request, '1234', '1234')
 
             expect(result).toEqual(expense);
+        });
+
+
+        it('should return a updated expense', async () => {
+
+            const expense = {
+                _id: '1234',
+                description: '',
+                date: new Date(),
+                userId: '1234',
+                value: 250,
+                isActive: true
+            }
+
+            const request: UpdateExpensesDto = {
+                description: 'Description'
+            };
+
+            mockRepository.findOne.mockReturnValue(expense);
+
+            const updatedExpense = {
+                ...expense
+            };
+
+            updatedExpense.description = 'Description';
+
+            mockRepository.findOneAndUpdate.mockReturnValue(updatedExpense);
+
+            let result = await expensesService.update('1234', '1234', request)
+
+            expect(result.description).toEqual(request.description);
+
+        });
+
+
+        it('should return undefined when try to update an expense that doesnt exists', async () => {
+
+            const expense = undefined;
+
+            const request: UpdateExpensesDto = {
+                description: 'Description'
+            };
+
+            mockRepository.findOne.mockReturnValue(expense);
+
+            const updatedExpense = {
+                ...expense
+            };
+
+            updatedExpense.description = 'Description';
+
+            mockRepository.findOneAndUpdate.mockReturnValue(updatedExpense);
+
+            let result = await expensesService.update('12345', '1234', request)
+
+            expect(result).toBeUndefined();
+
+        });
+
+
+        it('should return deleted expense', async () => {
+
+            const expense = {
+                _id: '1234',
+                description: '',
+                date: new Date(),
+                userId: '1234',
+                value: 250,
+                isActive: true
+            };
+
+            mockRepository.findOne.mockReturnValue(expense);
+
+            const updatedExpense = {
+                ...expense
+            };
+
+            updatedExpense.isActive = false;
+
+            mockRepository.findOneAndUpdate.mockReturnValue(updatedExpense);
+
+            let result = await expensesService.delete('12345', '1234')
+
+            expect(result).toEqual(updatedExpense);
+
+        });
+
+
+        it('should return null when try to delete an expense that is already deleted', async () => {
+
+            const expense = {
+                _id: '1234',
+                description: '',
+                date: new Date(),
+                userId: '1234',
+                value: 250,
+                isActive: false
+            };
+
+            mockRepository.findOne.mockReturnValue(expense);
+
+
+            let result = await expensesService.delete('1234', '1234')
+
+            expect(result).toBeUndefined();
+
         });
 
     });
