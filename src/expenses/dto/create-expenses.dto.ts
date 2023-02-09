@@ -1,5 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsNotEmpty, IsString, IsDate, IsNumber, MaxLength, MaxDate, IsPositive } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsNotEmpty, IsString, IsNumber, MaxLength, MaxDate, IsPositive, IsDate } from 'class-validator';
 
 export class CreateExpensesDto {
 
@@ -8,6 +9,7 @@ export class CreateExpensesDto {
     description: string;
 
 
+    @Transform(({ value }) => new Date(value))
     @IsDate()
     @MaxDate(new Date())
     date: string;

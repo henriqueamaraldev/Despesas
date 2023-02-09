@@ -16,16 +16,17 @@ export class ExpensesController {
     @Post()
     @UseGuards(JwtAuthGuard)
     async createExpense(
-        @Body() payload: CreateExpensesDto,
+        @Body() createExpenseDto: CreateExpensesDto,
         @Res() res: Response,
-        @Req() req
+        @Req() { user }
     ) {
 
-        const userId = req.user.id;
+        const newExpense = await this.expensesService.create(createExpenseDto, user.id, user.email);
 
-        let userEmail = req.user.email;
+        if (!newExpense) {
 
-        const newExpense = await this.expensesService.create(payload, userId, userEmail);
+            res.status(HttpStatus.BAD_REQUEST).send('Parametros invalidos.')
+        }
 
         res.status(HttpStatus.OK).send(newExpense)
 
