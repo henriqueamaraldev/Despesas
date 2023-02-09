@@ -1,3 +1,7 @@
 PORT = 3000
 MONGODBLINK = 
-SECRET = 
+SECRET = secret
+ADMIN_EMAIL = 
+SMTP_HOST = smtp.sendgrid.net
+SMTP_USER = apikey
+SMTP_PASS = 
